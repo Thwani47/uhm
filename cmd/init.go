@@ -29,8 +29,8 @@ func createSchema(db *sql.DB) {
 
 	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS commands (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		command TEXT NOT NULL,
-		description TEXT NOT NULL
+		name TEXT NOT NULL,
+		command TEXT NOT NULL
 	)`)
 
 	if err != nil {
