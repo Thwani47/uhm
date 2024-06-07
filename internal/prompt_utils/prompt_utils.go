@@ -13,7 +13,48 @@ type PromptContent struct {
 	Label        string
 }
 
-func PromptInput(pc PromptContent) string {
+type PromptSelectRunner interface {
+	Run() (int, string, error)
+	SetupSelectPrompt(pc PromptContent, items []string)
+}
+
+type PromptInputRunner interface {
+	Run() (string, error)
+	SetupInputPrompt(pc PromptContent, validate func(string) error, templates *promptui.PromptTemplates)
+}
+
+type RealSelectRunner struct {
+	Select promptui.Select
+}
+
+func (r *RealSelectRunner) Run() (int, string, error) {
+	return r.Select.Run()
+}
+
+func (r *RealSelectRunner) SetupSelectPrompt(pc PromptContent, items []string) {
+	r.Select = promptui.Select{
+		Label: pc.Label,
+		Items: items,
+	}
+}
+
+type RealInputRunner struct {
+	Prompt promptui.Prompt
+}
+
+func (r *RealInputRunner) Run() (string, error) {
+	return r.Prompt.Run()
+}
+
+func (r *RealInputRunner) SetupInputPrompt(pc PromptContent, validate func(string) error, templates *promptui.PromptTemplates) {
+	r.Prompt = promptui.Prompt{
+		Label:     pc.Label,
+		Validate:  validate,
+		Templates: templates,
+	}
+}
+
+func PromptInput(pc PromptContent, runner PromptInputRunner) string {
 	validate := func(input string) error {
 		if len(input) == 0 {
 			return errors.New(pc.ErrorMessage)
@@ -29,13 +70,9 @@ func PromptInput(pc PromptContent) string {
 		Success: "{{ . | bold }}: ",
 	}
 
-	prompt := promptui.Prompt{
-		Label:     pc.Label,
-		Validate:  validate,
-		Templates: templates,
-	}
+	runner.SetupInputPrompt(pc, validate, templates)
 
-	result, err := prompt.Run()
+	result, err := runner.Run()
 
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
@@ -45,13 +82,10 @@ func PromptInput(pc PromptContent) string {
 	return result
 }
 
-func PromptSelect(pc PromptContent, items []string) string {
-	prompt := promptui.Select{
-		Label: pc.Label,
-		Items: items,
-	}
+func PromptSelect(pc PromptContent, items []string, runner PromptSelectRunner) string {
+	runner.SetupSelectPrompt(pc, items)
 
-	_, result, err := prompt.Run()
+	_, result, err := runner.Run()
 
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)

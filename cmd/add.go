@@ -21,17 +21,17 @@ var addCmd = &cobra.Command{
 		commandName := promptutils.PromptInput(promptutils.PromptContent{
 			Label:        "Enter the command name: ",
 			ErrorMessage: "Command name cannot be empty",
-		})
+		}, &promptutils.RealInputRunner{})
 
 		commandValue := promptutils.PromptInput(promptutils.PromptContent{
 			Label:        "Enter the command: ",
 			ErrorMessage: "Command cannot be empty",
-		})
+		}, &promptutils.RealInputRunner{})
 
 		commandDescription := promptutils.PromptInput(promptutils.PromptContent{
 			Label:        "Enter a description for the command: ",
 			ErrorMessage: "Description cannot be empty",
-		})
+		}, &promptutils.RealInputRunner{})
 
 		err := database.AddCommand(commandName, commandValue, commandDescription)
 
