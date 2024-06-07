@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	database "github.com/Thwani47/uhm/db"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -16,35 +17,19 @@ var listCmd = &cobra.Command{
 	Short: "List all commands",
 	Long:  "List all stored commands",
 	Run: func(cmd *cobra.Command, args []string) {
-		db, err := database.OpenDb()
+		commands, err := database.ListCommands()
 
 		if err != nil {
-			fmt.Printf("Error opening database: %v\n", err)
+			fmt.Printf("Error listing commands: %v\n", err)
 			return
 		}
 
-		defer db.Close()
-
-		rows, err := db.Query("SELECT * FROM commands")
-
-		if err != nil {
-			fmt.Printf("Error querying database: %v\n", err)
-			return
+		for _, command := range commands {
+			d := color.New(color.FgGreen, color.Bold)
+			d.Printf("%s: ", command.Name)
+			d = color.New(color.FgWhite).Add(color.Underline)
+			d.Printf("%s", command.Command)
+			fmt.Printf("  %s\n", command.Description)
 		}
-
-		defer rows.Close()
-
-		fmt.Println("Commands:")
-		for rows.Next() {
-			var id int
-			var name, command string
-			err = rows.Scan(&id, &name, &command)
-			if err != nil {
-				fmt.Printf("Error scanning row: %v\n", err)
-				return
-			}
-			fmt.Printf("%d: %s: %s\n", id, name, command)
-		}
-
 	},
 }

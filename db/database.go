@@ -8,7 +8,11 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func OpenDb() (*sql.DB, error) {
+type DB struct {
+	*sql.DB
+}
+
+func createOrOpenDatabase() (*DB, error) {
 	dbPath := "uhm.db"
 
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
@@ -24,5 +28,5 @@ func OpenDb() (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	return db, nil
+	return &DB{db}, nil
 }
