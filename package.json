@@ -1,0 +1,21 @@
+{
+  "name": "uhm",
+  "version": "0.1.0",
+  "description": "A CLI app to help you remember your commonly used commands",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "go-npm": "^0.1.9"
+  },
+  "postinstall" : "go-npm install",
+  "preuninstall" : "go-npm uninstall",
+  "goBinary": {
+    "name": "uhm",
+    "path" : "./bin",
+    "url" : "https://github.com/Thwani47/uhm/releases/download/v{{version}}/uhm_{{platform}}_{{arch}}.tar.gz"
+  }
+}
