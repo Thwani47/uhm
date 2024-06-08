@@ -59,14 +59,14 @@ type AdditionalValidation struct {
 	ValidationFunc func(string) bool
 }
 
-func PromptInput(pc PromptContent, addionalValidation AdditionalValidation, runner PromptInputRunner) string {
+func PromptInput(pc PromptContent, additionalValidation AdditionalValidation, runner PromptInputRunner) string {
 	validate := func(input string) error {
 		if len(input) == 0 {
 			return errors.New(pc.ErrorMessage)
 		}
 
-		if addionalValidation.ValidationFunc(input) {
-			return errors.New(addionalValidation.ErrorMesage)
+		if additionalValidation.ValidationFunc(input) {
+			return errors.New(additionalValidation.ErrorMesage)
 		}
 
 		return nil

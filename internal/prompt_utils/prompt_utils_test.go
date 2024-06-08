@@ -45,7 +45,12 @@ func TestPromptInput(t *testing.T) {
 		ErrorMessage: "Input cannot be empty",
 	}
 
-	result := PromptInput(pc, &MockInputRunner{
+	result := PromptInput(pc, AdditionalValidation{
+		ErrorMesage: "",
+		ValidationFunc: func(input string) bool {
+			return false
+		},
+	}, &MockInputRunner{
 		ShouldError: false,
 	})
 
@@ -58,7 +63,12 @@ func TestPromptInput_Error(t *testing.T) {
 		ErrorMessage: "Input cannot be empty",
 	}
 
-	result := PromptInput(pc, &MockInputRunner{
+	result := PromptInput(pc, AdditionalValidation{
+		ErrorMesage: "",
+		ValidationFunc: func(input string) bool {
+			return false
+		},
+	}, &MockInputRunner{
 		ShouldError: true,
 	})
 
