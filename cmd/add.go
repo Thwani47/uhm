@@ -55,7 +55,7 @@ var addCmd = &cobra.Command{
 		}, promptutils.AdditionalValidation{ // we don't need any additional validtion for the command
 			ErrorMesage: "",
 			ValidationFunc: func(input string) bool {
-				return true
+				return false
 			},
 		}, &promptutils.RealInputRunner{})
 
@@ -65,15 +65,13 @@ var addCmd = &cobra.Command{
 			return "{{ ." + variableName + " }}"
 		})
 
-		fmt.Println(commandValue)
-
 		commandDescription := promptutils.PromptInput(promptutils.PromptContent{
 			Label:        "Enter a description for the command: ",
 			ErrorMessage: "Description cannot be empty",
 		}, promptutils.AdditionalValidation{ // we don't need any additional validtion for the description
 			ErrorMesage: "",
 			ValidationFunc: func(input string) bool {
-				return true
+				return false
 			},
 		}, &promptutils.RealInputRunner{})
 
