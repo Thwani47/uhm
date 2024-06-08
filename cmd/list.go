@@ -28,8 +28,7 @@ var listCmd = &cobra.Command{
 			d := color.New(color.FgGreen, color.Bold)
 			d.Printf("%s: ", command.Name)
 			d = color.New(color.FgWhite).Add(color.Underline)
-			d.Printf("%s", command.Command)
-			fmt.Printf("  %s\n", command.Description)
+			d.Printf("%s\n", command.Command)
 		}
 	},
 }

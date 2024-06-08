@@ -54,10 +54,19 @@ func (r *RealInputRunner) SetupInputPrompt(pc PromptContent, validate func(strin
 	}
 }
 
-func PromptInput(pc PromptContent, runner PromptInputRunner) string {
+type AdditionalValidation struct {
+	ErrorMesage    string
+	ValidationFunc func(string) bool
+}
+
+func PromptInput(pc PromptContent, addionalValidation AdditionalValidation, runner PromptInputRunner) string {
 	validate := func(input string) error {
 		if len(input) == 0 {
 			return errors.New(pc.ErrorMessage)
+		}
+
+		if addionalValidation.ValidationFunc(input) {
+			return errors.New(addionalValidation.ErrorMesage)
 		}
 
 		return nil
