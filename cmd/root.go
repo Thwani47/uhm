@@ -1,8 +1,12 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"os"
+	"regexp"
+	"strings"
+	"text/template"
 
 	database "github.com/Thwani47/uhm/db"
 	promptutils "github.com/Thwani47/uhm/internal/prompt_utils"
@@ -33,6 +37,44 @@ var rootCmd = &cobra.Command{
 		}
 
 		selectedCommand := promptutils.MakeSelection(availableCommands)
+
+		re := regexp.MustCompile(`{{\s*\.\w+\s*}}`)
+		matches := re.FindAllString(selectedCommand, -1)
+
+		if len(matches) > 0 {
+			template, err := template.New("command").Parse(selectedCommand)
+
+			if err != nil {
+				fmt.Println("Error parsing command", err)
+				os.Exit(1)
+			}
+
+			variablesMap := make(map[string]string)
+			for _, match := range matches {
+				variableName := strings.TrimSpace(match[4 : len(match)-2])
+				variableValue := promptutils.PromptInput(promptutils.PromptContent{
+					Label:        fmt.Sprintf("Enter value for %s", variableName),
+					ErrorMessage: "Value cannot be empty",
+				}, promptutils.AdditionalValidation{
+					ErrorMesage: "",
+					ValidationFunc: func(input string) bool {
+						return false
+					},
+				}, &promptutils.RealInputRunner{})
+
+				variablesMap[variableName] = variableValue
+			}
+
+			var command bytes.Buffer
+			err = template.Execute(&command, variablesMap)
+
+			if err != nil {
+				fmt.Println("Error executing template", err)
+				os.Exit(1)
+			}
+
+			selectedCommand = command.String()
+		}
 
 		if err := clipboard.WriteAll(selectedCommand); err != nil {
 			fmt.Println("Error copying command to clipboard", err)
