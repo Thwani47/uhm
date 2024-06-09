@@ -6,14 +6,12 @@ before:
 
 builds:
   - binary: uhm
-  - env:
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
       - darwin
-  - flags:
-      - -mod=vendor
 release:
   prerelease: auto
 
@@ -23,16 +21,16 @@ universal_binaries:
 brews:
   - name: uhm
     homepage: https://github.com/Thwani47/uhm
-    tap:
-      owner: Thwan47
+    repository:
+      owner: Thwani47
       name: homebrew-tools
+      branch: master
     commit_author:
       name: Thwani47
       email: thulaniinnocent47@gmail.com
-    branch: master
 
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 
 changelog:
   sort: asc
