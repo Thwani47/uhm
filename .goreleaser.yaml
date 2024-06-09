@@ -6,6 +6,8 @@ before:
 
 builds:
   - binary: uhm
+    env:
+      - CGO_ENABLED=1
     goos:
       - linux
       - windows
