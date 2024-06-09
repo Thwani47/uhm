@@ -1,30 +1,38 @@
-version: 2 
+version: 2
 
 before:
   hooks:
     - go mod tidy
 
 builds:
+  - binary: uhm
   - env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
       - darwin
+  - flags:
+      - -mod=vendor
+release:
+  prerelease: auto
 
-archives:
-  - format: tar.gz
-    name_template: >-
-      {{ .ProjectName }}_
-      {{ .Version }}_
-      {{- title .Os }}_
-      {{- if eq .Arch "amd64" }}x86_64
-      {{- else if eq .Arch "386" }}i386
-      {{- else }}{{ .Arch }}{{ end }}
-      {{- if .Arm }}v{{ .Arm }}{{ end }}
-    format_overrides:
-      - goos: windows
-        format: zip
+universal_binaries:
+  - replace: true
+
+brews:
+  - name: uhm
+    homepage: https://github.com/Thwani47/uhm
+    tap:
+      owner: Thwan47
+      name: homebrew-tools
+    commit_author:
+      name: Thwani47
+      email: thulaniinnocent47@gmail.com
+    branch: master
+
+checksum:
+  name_template: 'checksums.txt'
 
 changelog:
   sort: asc
