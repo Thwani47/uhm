@@ -7,13 +7,17 @@ before:
 builds:
   - binary: uhm
     env:
-      - CGO_ENABLED=1
+      - CGO_ENABLED=0
     goos:
       - linux
       - windows
       - darwin
     ldflags:
       - -X main.Version={{.Version}}
+    overrides:
+      - goos: darwin
+        env:
+          - CGO_ENABLED=1
 release:
   prerelease: auto
 
