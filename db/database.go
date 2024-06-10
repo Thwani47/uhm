@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 type DB struct {
@@ -23,7 +23,8 @@ func createOrOpenDatabase() (*DB, error) {
 		file.Close()
 	}
 
-	db, err := sql.Open("sqlite3", dbPath)
+	db, err := sql.Open("sqlite", dbPath)
+	db.SetMaxOpenConns(1)
 
 	if err != nil {
 		return nil, err
