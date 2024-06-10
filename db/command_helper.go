@@ -1,6 +1,10 @@
 package database
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+	"strings"
+)
 
 func AddCommand(name, command, description string) error {
 	db, err := createOrOpenDatabase()
@@ -65,4 +69,26 @@ func ListCommands() ([]Command, error) {
 
 	return commands, nil
 
+}
+
+func DeleteCommands(commands []string) error {
+	db, err := createOrOpenDatabase()
+
+	if err != nil {
+		return err
+	}
+
+	defer db.Close()
+
+	commandStr := strings.Join(commands, "','")
+
+	sqlStatement := fmt.Sprintf("DELETE FROM commands WHERE name IN ('%s')", commandStr)
+
+	_, err = db.Exec(sqlStatement)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

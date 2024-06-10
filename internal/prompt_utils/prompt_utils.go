@@ -13,6 +13,12 @@ type PromptContent struct {
 	Label        string
 }
 
+type MultiSelectPrompt struct {
+	ErrorMessage string
+	Label        string
+	Options      []string
+}
+
 type AdditionalValidation struct {
 	ErrorMesage    string
 	ValidationFunc func(string) bool
@@ -40,9 +46,24 @@ func PromptInput(pc PromptContent, additionalValidation AdditionalValidation) st
 		Value(&result).Run()
 
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
+		fmt.Print("Prompt failed ", err, "\n")
 		os.Exit(1)
 	}
 
 	return result
+}
+
+func PromptMultiSelect(pms MultiSelectPrompt) []string {
+	var selections []string
+	options := make([]huh.Option[string], len(pms.Options))
+
+	for index, option := range pms.Options {
+		options[index] = huh.Option[string]{
+			Key:   fmt.Sprint(option),
+			Value: option,
+		}
+	}
+	huh.NewMultiSelect[string]().Title(pms.Label).Options(options...).Value(&selections).Run()
+
+	return selections
 }
