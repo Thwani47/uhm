@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"path/filepath"
 
 	_ "modernc.org/sqlite"
 )
@@ -13,7 +14,13 @@ type DB struct {
 }
 
 func createOrOpenDatabase() (*DB, error) {
-	dbPath := "uhm.db"
+	homeDir, err := os.UserHomeDir()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	dbPath := filepath.Join(homeDir, "uhm.db")
 
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
 		file, err := os.Create(dbPath)
