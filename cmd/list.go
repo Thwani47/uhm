@@ -5,6 +5,7 @@ import (
 
 	database "github.com/Thwani47/uhm/db"
 	"github.com/fatih/color"
+	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )
 
@@ -24,11 +25,20 @@ var listCmd = &cobra.Command{
 			return
 		}
 
-		for _, command := range commands {
-			d := color.New(color.FgGreen, color.Bold)
-			d.Printf("%s: ", command.Name)
-			d = color.New(color.FgWhite).Add(color.Underline)
-			d.Printf("%s\n", command.Command)
+		if len(commands) == 0 {
+			return
 		}
+
+		// headerFormatter := color.New(color.FgGreen, color.Bold, color.Underline).SprintFunc()
+		// columnFormatter := color.New(color.FgYellow).SprintFunc()
+
+		tbl := table.New("Name", "Description")
+		tbl.WithHeaderFormatter(color.New(color.FgGreen, color.Bold).Sprintf).WithFirstColumnFormatter(color.New(color.FgYellow).Sprintf)
+
+		for _, command := range commands {
+			tbl.AddRow(command.Name, command.Description)
+		}
+
+		tbl.Print()
 	},
 }
