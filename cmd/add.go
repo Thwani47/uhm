@@ -47,7 +47,7 @@ var addCmd = &cobra.Command{
 
 				return ok
 			},
-		}, &promptutils.RealInputRunner{})
+		})
 
 		commandValue := promptutils.PromptInput(promptutils.PromptContent{
 			Label:        "Enter the command: (Add variables with $variable_name)",
@@ -57,7 +57,7 @@ var addCmd = &cobra.Command{
 			ValidationFunc: func(input string) bool {
 				return false
 			},
-		}, &promptutils.RealInputRunner{})
+		})
 
 		re := regexp.MustCompile(`\$(\w+)`)
 		commandValue = re.ReplaceAllStringFunc(commandValue, func(s string) string {
@@ -73,7 +73,7 @@ var addCmd = &cobra.Command{
 			ValidationFunc: func(input string) bool {
 				return false
 			},
-		}, &promptutils.RealInputRunner{})
+		})
 
 		err = database.AddCommand(commandName, commandValue, commandDescription)
 

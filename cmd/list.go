@@ -29,9 +29,6 @@ var listCmd = &cobra.Command{
 			return
 		}
 
-		// headerFormatter := color.New(color.FgGreen, color.Bold, color.Underline).SprintFunc()
-		// columnFormatter := color.New(color.FgYellow).SprintFunc()
-
 		tbl := table.New("Name", "Description")
 		tbl.WithHeaderFormatter(color.New(color.FgGreen, color.Bold).Sprintf).WithFirstColumnFormatter(color.New(color.FgYellow).Sprintf)
 

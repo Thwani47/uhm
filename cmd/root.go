@@ -60,7 +60,7 @@ var rootCmd = &cobra.Command{
 					ValidationFunc: func(input string) bool {
 						return false
 					},
-				}, &promptutils.RealInputRunner{})
+				})
 
 				variablesMap[variableName] = variableValue
 			}
