@@ -8,7 +8,7 @@ $latestVersion = $latestVersion -replace 'v', ''
 
 Write-Output "Downloading uhm v$latestVersion...."
 
-$downloadUrl = "https://github.com/$owner/$repo/releases/download/v$latestVersion/uhm_$latestVersionNumber" + "_windows_amd64.tar.gz"
+$downloadUrl = "https://github.com/$owner/$repo/releases/download/v$latestVersion/uhm_$latestVersion" + "_windows_amd64.tar.gz"
 $downloadPath = "$HOME\tools\uhm_v$latestVersion" + "_windows_amd64.tar.gz"
 
 Write-Output "Downloading uhm v$latestVersion from $downloadUrl to $downloadPath"
@@ -32,3 +32,6 @@ try {
 
 
 
+
+
+https://github.com/Thwani47/uhm/releases/download/v0.1.2/uhm__windows_amd64.tar.gz
