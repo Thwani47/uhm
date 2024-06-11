@@ -24,6 +24,12 @@ type AdditionalValidation struct {
 	ValidationFunc func(string) bool
 }
 
+type ConfirmPrompt struct {
+	Title       string
+	Affirmative string
+	Negative    string
+}
+
 func PromptInput(pc PromptContent, additionalValidation AdditionalValidation) string {
 	validate := func(input string) error {
 		if len(input) == 0 {
@@ -66,4 +72,23 @@ func PromptMultiSelect(pms MultiSelectPrompt) []string {
 	huh.NewMultiSelect[string]().Title(pms.Label).Options(options...).Value(&selections).Run()
 
 	return selections
+}
+
+func PromptConfirm(cp ConfirmPrompt) bool {
+	var result bool
+
+	err := huh.
+		NewConfirm().
+		Title(cp.Title).
+		Affirmative(cp.Affirmative).
+		Negative(cp.Negative).
+		Value(&result).
+		Run()
+
+	if err != nil {
+		fmt.Print("Prompt failed ", err, "\n")
+		os.Exit(1)
+	}
+
+	return result
 }

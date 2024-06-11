@@ -39,14 +39,23 @@ var deleteCmd = &cobra.Command{
 			return
 		}
 
-		err = database.DeleteCommands(commandsToDelete)
-
-		if err != nil {
-			fmt.Printf("Error deleting command: %v\n", err)
+		if !promptutils.PromptConfirm(promptutils.ConfirmPrompt{
+			Title:       "Are you sure you want to delete the selected command(s)?",
+			Affirmative: "Yes",
+			Negative:    "No",
+		}) {
+			fmt.Println("Deletion cancelled")
 			return
 		}
 
-		fmt.Println("Commands deleted successfully! ✅")
+		err = database.DeleteCommands(commandsToDelete)
+
+		if err != nil {
+			fmt.Printf("Error deleting command(s): %v\n", err)
+			return
+		}
+
+		fmt.Println("Command(s) deleted successfully! ✅")
 	},
 }
 

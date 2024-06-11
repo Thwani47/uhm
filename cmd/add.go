@@ -59,7 +59,7 @@ var addCmd = &cobra.Command{
 			},
 		})
 
-		re := regexp.MustCompile(`\$(\w+)`)
+		re := regexp.MustCompile(`\$(\w+)\b`)
 		commandValue = re.ReplaceAllStringFunc(commandValue, func(s string) string {
 			variableName := strings.TrimPrefix(s, "$")
 			return "{{ ." + variableName + " }}"
