@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -18,7 +19,7 @@ func AddCommand(name, command, description string) error {
 	_, err = db.Exec("INSERT INTO commands (name, command, description) VALUES (?, ?, ?)", name, command, description)
 
 	if err != nil {
-		return err
+		return errors.New("please run `uhm init` to initialize the database")
 	}
 
 	return nil
@@ -42,7 +43,7 @@ func ListCommands() ([]Command, error) {
 	rows, err := db.Query("SELECT name, command, description FROM commands")
 
 	if err != nil {
-		return nil, err
+		return nil, errors.New("please run `uhm init` to initialize the database")
 	}
 
 	defer rows.Close()
@@ -87,7 +88,7 @@ func DeleteCommands(commands []string) error {
 	_, err = db.Exec(sqlStatement)
 
 	if err != nil {
-		return err
+		return errors.New("please run `uhm init` to initialize the database")
 	}
 
 	return nil
