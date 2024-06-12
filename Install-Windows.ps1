@@ -9,15 +9,18 @@ $latestVersion = $latestVersion -replace 'v', ''
 Write-Output "Downloading uhm v$latestVersion...."
 
 $downloadUrl = "https://github.com/$owner/$repo/releases/download/v$latestVersion/uhm_$latestVersion" + "_windows_amd64.tar.gz"
-$downloadPath = "$HOME\tools\uhm_v$latestVersion" + "_windows_amd64.tar.gz"
+$downloadPath =  "$HOME\tools\uhm_v" +$latestVersion + "_windows_amd64.tar.gz"
 
 Write-Output "Downloading uhm v$latestVersion from $downloadUrl to $downloadPath"
-Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPaths
+Invoke-WebRequest -Uri $downloadUrl -OutFile (New-Item -Path $downloadPath -Force)
 
-$unzipPath = "$HOME\tools\uhm_v$latestVersion" + "_windows_amd64"
+$unzipPath = "$HOME\tools\uhm_v$latestVersion"+"_windows_amd64"
 Write-Output "Unzipping $downloadPath to $unzipPath"
 
-Expand-Archive -Path $downloadPath -DestinationPath $unzipPath -Force
+Write-Output $downloadPath
+Write-Output $unzipPath
+
+tar -zxvf $downloadPath -C $unzipPath
 
 $env:PATH += ";$unzipPath"
 
@@ -27,11 +30,3 @@ try {
 } catch {
     Write-Output "Failed to add uhm to the PATH. Please add $unzipPath to your PATH manually."
 }
-
-
-
-
-
-
-
-https://github.com/Thwani47/uhm/releases/download/v0.1.2/uhm__windows_amd64.tar.gz
