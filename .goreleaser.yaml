@@ -41,6 +41,12 @@ brews:
 checksum:
   name_template: "checksums.txt"
 
+archives:
+  - format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: binary
+
 changelog:
   sort: asc
   filters:

@@ -6,8 +6,13 @@ A CLI app to help you remember your commonly used commands
 ![uhm](./uhm.gif)
 
 ## Installation
+### MacOS
 ```bash
 > brew tap Thwani47/tools
 > brew install uhm
 > uhm version
 ```
+
+### Windows
+```bash
+
