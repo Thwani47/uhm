@@ -101,3 +101,36 @@ func DeleteCommands(commands []string) error {
 
 	return nil
 }
+
+func ListCategories() ([]string, error) {
+	db, err := createOrOpenDatabase()
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer db.Close()
+
+	rows, err := db.Query("SELECT name FROM categories")
+
+	if err != nil {
+		return nil, errors.New("please run `uhm init` to initialize the database")
+	}
+
+	defer rows.Close()
+
+	var categories []string
+
+	for rows.Next() {
+		var category string
+		err = rows.Scan(&category)
+
+		if err != nil {
+			return nil, err
+		}
+
+		categories = append(categories, category)
+	}
+
+	return categories, nil
+}

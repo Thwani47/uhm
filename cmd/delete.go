@@ -28,7 +28,7 @@ var deleteCmd = &cobra.Command{
 
 		availableCommands[len(commands)] = "Cancel"
 
-		commandsToDelete := promptutils.PromptMultiSelect(promptutils.MultiSelectPrompt{
+		commandsToDelete := promptutils.PromptMultiSelect(promptutils.SelectPrompt{
 			Label:        "Select the commands to delete",
 			ErrorMessage: "Please select at least one command",
 			Options:      availableCommands,

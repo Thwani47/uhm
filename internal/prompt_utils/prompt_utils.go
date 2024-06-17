@@ -13,7 +13,7 @@ type PromptContent struct {
 	Label        string
 }
 
-type MultiSelectPrompt struct {
+type SelectPrompt struct {
 	ErrorMessage string
 	Label        string
 	Options      []string
@@ -59,19 +59,35 @@ func PromptInput(pc PromptContent, additionalValidation AdditionalValidation) st
 	return result
 }
 
-func PromptMultiSelect(pms MultiSelectPrompt) []string {
+func PromptMultiSelect(sp SelectPrompt) []string {
 	var selections []string
-	options := make([]huh.Option[string], len(pms.Options))
+	options := make([]huh.Option[string], len(sp.Options))
 
-	for index, option := range pms.Options {
+	for index, option := range sp.Options {
 		options[index] = huh.Option[string]{
 			Key:   fmt.Sprint(option),
 			Value: option,
 		}
 	}
-	huh.NewMultiSelect[string]().Title(pms.Label).Options(options...).Value(&selections).Run()
+	huh.NewMultiSelect[string]().Title(sp.Label).Options(options...).Value(&selections).Run()
 
 	return selections
+}
+
+func PromptSelect(sp SelectPrompt) string {
+	var selection string
+	options := make([]huh.Option[string], len(sp.Options))
+
+	for index, option := range sp.Options {
+		options[index] = huh.Option[string]{
+			Key:   fmt.Sprint(option),
+			Value: option,
+		}
+	}
+
+	huh.NewSelect[string]().Title(sp.Label).Options(options...).Value(&selection).Run()
+
+	return selection
 }
 
 func PromptConfirm(cp ConfirmPrompt) bool {

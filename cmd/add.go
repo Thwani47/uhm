@@ -75,7 +75,24 @@ var addCmd = &cobra.Command{
 			},
 		})
 
-		err = database.AddCommand(commandName, commandValue, commandDescription)
+		categories, err := database.ListCategories()
+		categories = append(categories, "None")
+
+		if err != nil {
+			fmt.Printf("Error getting categories: %v\n", err)
+			return
+		}
+
+		category := promptutils.PromptSelect(promptutils.SelectPrompt{
+			Label:   "Select a category for the command: ",
+			Options: categories,
+		})
+
+		if category == "None" {
+			category = ""
+		}
+
+		err = database.AddCommand(commandName, commandValue, category, commandDescription)
 
 		if err != nil {
 			fmt.Printf("Error adding command: %v\n", err)
