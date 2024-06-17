@@ -33,8 +33,17 @@ func CreateSchema() {
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name TEXT NOT NULL,
 		command TEXT NOT NULL,
+		category TEXT NULL,
 		description TEXT NULL
-	)`)
+	);
+	
+	CREATE TABLE IF NOT EXISTS categories (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		name TEXT NOT NULL	
+	);
+
+	INSERT INTO categories (name) VALUES ('Azure'), ('Kubernetes');
+	`)
 
 	if err != nil {
 		fmt.Printf("Error creating database schema: %v\n", err)
