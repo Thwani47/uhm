@@ -15,4 +15,5 @@ A CLI app to help you remember your commonly used commands
 
 ### Windows
 ```bash
-
+> winget install --id=Thwani.Uhm  -e
+```
