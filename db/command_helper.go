@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func AddCommand(name, command, category, description string) error {
+func AddCommand(name, command, description string) error {
 	db, err := createOrOpenDatabase()
 
 	if err != nil {
@@ -16,7 +16,7 @@ func AddCommand(name, command, category, description string) error {
 
 	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO commands (name, command, category, description) VALUES (?, ?, ?, ?)", name, command, category, description)
+	_, err = db.Exec("INSERT INTO commands (name, command, description) VALUES (?, ?, ?)", name, command, description)
 
 	if err != nil {
 		return errors.New("please run `uhm init` to initialize the database")
@@ -28,7 +28,6 @@ func AddCommand(name, command, category, description string) error {
 type Command struct {
 	Name        string
 	Command     string
-	Category    string
 	Description string
 }
 
@@ -41,7 +40,7 @@ func ListCommands() ([]Command, error) {
 
 	defer db.Close()
 
-	rows, err := db.Query("SELECT name, command, category, description FROM commands")
+	rows, err := db.Query("SELECT name, command, description FROM commands")
 
 	if err != nil {
 		return nil, errors.New("please run `uhm init` to initialize the database")
@@ -53,18 +52,11 @@ func ListCommands() ([]Command, error) {
 
 	for rows.Next() {
 		var command Command
-		var category sql.NullString
 		var description sql.NullString
-		err = rows.Scan(&command.Name, &command.Command, &category, &description)
+		err = rows.Scan(&command.Name, &command.Command, &description)
 
 		if err != nil {
 			return nil, err
-		}
-
-		if category.Valid {
-			command.Category = category.String
-		} else {
-			command.Category = ""
 		}
 
 		if description.Valid {
@@ -100,37 +92,4 @@ func DeleteCommands(commands []string) error {
 	}
 
 	return nil
-}
-
-func ListCategories() ([]string, error) {
-	db, err := createOrOpenDatabase()
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer db.Close()
-
-	rows, err := db.Query("SELECT name FROM categories")
-
-	if err != nil {
-		return nil, errors.New("please run `uhm init` to initialize the database")
-	}
-
-	defer rows.Close()
-
-	var categories []string
-
-	for rows.Next() {
-		var category string
-		err = rows.Scan(&category)
-
-		if err != nil {
-			return nil, err
-		}
-
-		categories = append(categories, category)
-	}
-
-	return categories, nil
 }

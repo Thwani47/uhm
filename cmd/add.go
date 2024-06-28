@@ -2,13 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"os/exec"
 	"regexp"
 	"strings"
 
 	database "github.com/Thwani47/uhm/db"
 	promptutils "github.com/Thwani47/uhm/internal/prompt_utils"
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -30,33 +28,6 @@ var addCmd = &cobra.Command{
 		}
 
 		availableCommands := make(map[string]promptutils.PromptSuggestion, len(commands))
-
-		categories, err := database.ListCategories()
-		categories = append(categories, "None")
-
-		if err != nil {
-			fmt.Printf("Error getting categories: %v\n", err)
-			return
-		}
-
-		category := promptutils.PromptSelect(promptutils.SelectPrompt{
-			Label:   "Select a category for the command: ",
-			Options: categories,
-		})
-
-		if category == "None" {
-			category = ""
-		}
-
-		if category == "Azure" {
-			_, err := exec.Command("az", "--version").Output()
-
-			if err != nil {
-				color.Yellow(fmt.Sprintf("Error checking Azure CLI version: %v\n", err))
-			} else {
-				color.Green("Azure CLI () is installed\n")
-			}
-		}
 
 		for _, command := range commands {
 			availableCommands[command.Name] = promptutils.PromptSuggestion{
@@ -104,7 +75,7 @@ var addCmd = &cobra.Command{
 			},
 		})
 
-		err = database.AddCommand(commandName, commandValue, category, commandDescription)
+		err = database.AddCommand(commandName, commandValue, commandDescription)
 
 		if err != nil {
 			fmt.Printf("Error adding command: %v\n", err)

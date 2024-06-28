@@ -33,7 +33,6 @@ func CreateSchema() {
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name TEXT NOT NULL,
 		command TEXT NOT NULL,
-		category TEXT NULL,
 		description TEXT NULL
 	);
 	
@@ -41,8 +40,6 @@ func CreateSchema() {
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name TEXT NOT NULL	
 	);
-
-	INSERT INTO categories (name) VALUES ('Azure'), ('Kubernetes');
 	`)
 
 	if err != nil {
